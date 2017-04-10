@@ -14,8 +14,7 @@ var rename = require('gulp-rename');
 
 var opt = {
 	src: 'src/',
-	dest: 'dist/',
-	width: 100
+	dest: 'dist/'
 }
 
 // Start browserSync server
