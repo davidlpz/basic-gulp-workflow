@@ -1,6 +1,8 @@
-Gulp Workflow
+My gulp Workflow
 ======================
-A basic gulp workflow to compile sass, add vendor prefixes, minify css & javascript and live reload with browser sync.
+A basic gulp workflow to compile sass, add vendor prefixes, minify CSS & JS and live reload with browser sync.
+
+Works with HTML and PHP.
 
 ## Usage
 
@@ -18,8 +20,13 @@ A basic gulp workflow to compile sass, add vendor prefixes, minify css & javascr
 
 4. Install the dependencies
 
-        $ npm install gulp gulp-autoprefixer gulp-clean-css gulp-sass jshint gulp-jshint gulp-uglify browser-sync gulp-concat gulp-rename --save-dev
+        $ npm install gulp gulp-autoprefixer gulp-clean-css gulp-sass gulp-sourcemaps gulp-uglify gulp-rename browser-sync --save-dev
 
-5. Run the `default` task
+	To use with PHP also add
+
+		$ npm install gulp-connect-php --save-dev
+
+5. Run the `default` or `default-php`  task
 
         $ gulp default
+        $ gulp default-php
