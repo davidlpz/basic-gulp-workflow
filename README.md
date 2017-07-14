@@ -26,10 +26,7 @@ Works with HTML and PHP.
 
 		$ npm install gulp-connect-php --save-dev
 
-5. To use with HTML run the `default` task
+5. Run the `default` or `default-php`  task
 
         $ gulp default
-
-    To use with PHP run the `default-php`  task instead
-
         $ gulp default-php
