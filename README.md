@@ -1,4 +1,4 @@
-My gulp Workflow
+My gulp workflow
 ======================
 A basic gulp workflow to compile sass, add vendor prefixes, minify CSS & JS and live reload with browser sync.
 
