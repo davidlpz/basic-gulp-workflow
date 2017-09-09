@@ -17,7 +17,6 @@ var browserSync = require('browser-sync').create();
 var opt = {
 	src: 'html/',
 	dest: 'html/',
-	minDest: 'min/',
 	suffixMin: '.min'
 }
 
@@ -41,9 +40,17 @@ gulp.task('syncPHP', function(){
 	});
 });
 
-// Copy HTML files
-gulp.task('html', function(){
-	return gulp.src(opt.src + '**/*.html')
+gulp.task('syncWordpress', function(){
+	browserSync.init({
+        proxy: 'LOCAL WORDPRESS URL',
+        injectChanges: true
+    });
+});
+
+
+// Copy HTML and PHP files
+gulp.task('files', function(){
+	return gulp.src(opt.src + '**/*.+(html|php)')
 		.pipe(gulp.dest(opt.dest));
 });
 
@@ -62,16 +69,16 @@ gulp.task('images', function(){
 // Minify JS
 gulp.task('minifyJS', function(){
 	var src = opt.src + 'js/**'
-	return gulp.src([src + '/*.js', '!' + opt.src + '**/*min.js'])
+	return gulp.src([src + '/*.js', '!' + opt.src + '**/*' + opt.suffixMin + '*'])
 		.pipe(uglify())
 		.pipe(rename({suffix: opt.suffixMin }))
-		.pipe(gulp.dest(opt.dest + 'js/' + opt.minDest));
+		.pipe(gulp.dest(opt.dest + 'js/'));
 });
 
 // Add vendor prefixes to CSS and minify it
 gulp.task('css', function(){
 	var src = opt.src + 'css/**'
-	return gulp.src([src + '/*.css', '!' + src + '/*.min.css'])
+	return gulp.src([src + '/*.css', '!' + src + '/*' + opt.suffixMin + '*'])
 		.pipe(autoprefixer({ cascade: false })) // Autoprefixer
 		.pipe(gulp.dest(opt.dest + 'css/'))
 		.pipe(cleanCSS({debug: true})) // Minify file
@@ -99,16 +106,27 @@ gulp.task('sass', function(){
 // Default task
 gulp.task('default', ['sass', 'minifyJS'], function(){
 	gulp.start('syncHTML');
+	// gulp.watch(opt.src + '**/*.+(html|php)', ['files', browserSync.reload]);
 	gulp.watch(opt.src + '**/*.html').on('change', browserSync.reload);
 	gulp.watch([opt.src + 'css/**/*.+(scss|sass)', '!' + opt.src + 'css/**/*.min.css'], ['sass']);
 	gulp.watch([opt.src + 'js/**/*.js', '!' + opt.src + 'js/**/*min.js'], ['minifyJS', browserSync.reload]);
 });
 
-// Default task
+// Default task for PHP
 gulp.task('default-php', ['sass', 'minifyJS'], function(){
 	gulp.start('syncPHP');
-	gulp.watch(opt.src + '**/*.php').on('change', browserSync.reload);
-	gulp.watch([opt.src + 'css/**/*.+(scss|sass)', '!' + opt.src + 'css/**/*.min.css'], ['sass']);
+	// gulp.watch(opt.src + '**/*.+(html|php)', ['files', browserSync.reload]);
+	gulp.watch(opt.src + '**/*.+(html|php)').on('change', browserSync.reload);
+	gulp.watch(opt.src + 'css/**/*.+(scss|sass)', ['sass']);
+	gulp.watch([opt.src + 'js/**/*.js', '!' + opt.src + 'js/**/*min.js'], ['minifyJS', browserSync.reload]);
+});
+
+// Default task for Wordpress
+gulp.task('wordpress', ['sass', 'minifyJS'], function(){
+	gulp.start('syncWordpress');
+	// gulp.watch(opt.src + '**/*.+(html|php)', ['files', browserSync.reload]);
+	gulp.watch(opt.src + '**/*.+(html|php)').on('change', browserSync.reload);
+	gulp.watch(opt.src + 'css/**/*.+(scss|sass)', ['sass']);
 	gulp.watch([opt.src + 'js/**/*.js', '!' + opt.src + 'js/**/*min.js'], ['minifyJS', browserSync.reload]);
 });
 
