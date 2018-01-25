@@ -91,7 +91,7 @@ gulp.task('dist', ['files', 'css', 'js', 'images']);
 gulp.task('default', ['minifyJS', 'sass'], function(){
 	gulp.start('server');
 	gulp.watch(config.src.path).on('change', browserSync.reload);
-	gulp.watch(config.src.css, ['sass']);
+	gulp.watch(config.src.sass, ['sass']);
 	gulp.watch(config.src.js, ['minifyJS', browserSync.reload]);
 });
 
