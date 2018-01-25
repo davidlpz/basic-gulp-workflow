@@ -1,0 +1,16 @@
+{
+	"wp_proxy": "localhost/folder/",
+	"build": {
+		"path": "../",
+		"images": "../img/",
+		"css": "../",
+		"js": "../js/"
+	},
+	"src": {
+		"path": "../**/*.+(html|php)",
+		"images": "../img/",
+		"css": ["../**/*.css", "!../**/*.min.*", "!./**"],
+		"sass": ["../**/*.+(scss|sass)", "!./**"],
+		"js": ["../js/**/*.js", "!../**/*.min.*", "!./**"]
+	}
+}

@@ -14,19 +14,14 @@ Works with HTML and PHP.
 
         $ cd gulp-workflow
 
-3. Start a new project
+3. Install the dependencies
 
-        $ npm init
+        $ npm install
 
-4. Install the dependencies
+4. Edit the config.json file
 
-        $ npm install gulp gulp-autoprefixer gulp-clean-css gulp-sass gulp-sourcemaps gulp-uglify gulp-rename browser-sync --save-dev
-
-	To use with PHP also add
-
-		$ npm install gulp-connect-php --save-dev
-
-5. Run the `default` or `default-php`  task
+5. Run the `default` or `php` or `wordpress` task
 
         $ gulp default
-        $ gulp default-php
+        $ gulp php
+        $ gulp wordpress
