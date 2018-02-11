@@ -51,15 +51,27 @@ gulp.task('files', function(){
 // Copy IMG files
 gulp.task('images', function(){
 	return gulp.src(config.src.images)
-		.pipe(gulp.dest(config.src.images));
+		.pipe(rename(function (path){
+			path.basename = (path.basename.replace(/[^A-Z0-9]+/ig, "_")).toLowerCase();
+			path.extname = path.extname.toLowerCase();
+		}))
+		.pipe(gulp.dest(config.build.images));
 });
 
 // Minify JS
 gulp.task('minifyJS', function(){
 	return gulp.src(config.src.js)
-		.pipe(uglify())
-		.pipe(rename({suffix: '.min' }))
-		.pipe(gulp.dest(config.build.js));
+		.pipe(sourcemaps.init())
+			.pipe(uglify()).on('error', function(err){
+				console.log(err.toString());
+				this.emit('end');
+			})
+			.pipe(rename({ suffix: '.min' }))
+		.pipe(sourcemaps.write())
+		// .pipe(gulp.dest(config.build.js));
+		.pipe(gulp.dest(function(file){
+			return file.base;
+		}));
 });
 
 // Add vendor prefixes to CSS and minify it
@@ -68,7 +80,10 @@ gulp.task('css', function(){
 		.pipe(autoprefixer({ cascade: false }))
 		.pipe(cleanCSS({debug: true}))
 		.pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest(config.build.css))
+		// .pipe(gulp.dest(config.build.css))
+		.pipe(gulp.dest(function(file){
+			return file.base;
+		}))
 		.pipe(browserSync.stream());
 });
 
@@ -78,21 +93,23 @@ gulp.task('sass', function(){
 		.pipe(sourcemaps.init())
 			.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 			.pipe(autoprefixer({ cascade: false }))
-		.pipe(sourcemaps.write('/'))
-		.pipe(gulp.dest(config.build.css))
+		.pipe(sourcemaps.write('.'))
+		// .pipe(gulp.dest(config.build.css))
+		.pipe(gulp.dest(function(file){
+			return file.base;
+		}))
 		.pipe(browserSync.stream());
 });
 
-// Copy files from source to build folder
-gulp.task('dist', ['files', 'css', 'js', 'images']);
-
 
 // Default task
-gulp.task('default', ['minifyJS', 'sass'], function(){
+// gulp.task('default', ['minifyJS', 'sass'], function(){
+gulp.task('default', ['sass'], function(){
 	gulp.start('server');
 	gulp.watch(config.src.path).on('change', browserSync.reload);
 	gulp.watch(config.src.sass, ['sass']);
-	gulp.watch(config.src.js, ['minifyJS', browserSync.reload]);
+	gulp.watch(config.src.js).on('change', browserSync.reload);
+	// gulp.watch(config.src.js, ['minifyJS', browserSync.reload]);
 });
 
 gulp.task('php', function(){
@@ -104,3 +121,9 @@ gulp.task('wordpress', function(){
 	lang = 'wordpress';
 	gulp.start('default');
 });
+
+// Compile SASS and minify JS for distribution on same folder
+gulp.task('dist', ['sass', 'minifyJS']);
+
+// Copy files from source to build folder, compile SASS and minify JS
+gulp.task('dist-copy', ['files', 'images', 'sass', 'minifyJS']);
