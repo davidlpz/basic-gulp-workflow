@@ -1,24 +1,24 @@
 {
 	"wp_proxy": "localhost/folder/",
 	"build": {
-		"path": "../",
-		"images": "../img/",
-		"css": "../",
-		"js": "../js/"
+		"path": "../html/",
+		"images": "../html/img/",
+		"css": "../html/",
+		"js": "../html/js/"
 	},
 	"src": {
-		"path": ["../**/*.+(html|php)"],
-		"images": "../img/",
+		"path": ["../html/**/*.+(html|php)"],
+		"images": "../html/img/",
 		"css": [
-			"../css/**/*.css",
-			"!*.min.*"
+			"!../html/css/**/*min.*",
+			"../html/css/**/*.css"
 		],
 		"sass": [
-			"../css/**/*.+(scss|sass)"
+			"../html/css/**/*.+(scss|sass)"
 		],
 		"js": [
-			"../js/**/*.js",
-			"!../js/**/*.min.*"
+			"!../html/js/**/*min.*",
+			"../html/js/**/*.js"
 		]
 	}
 }
